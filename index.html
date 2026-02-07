@@ -39,9 +39,15 @@
             background-color: var(--bg-color); color: var(--text-main); 
             -webkit-font-smoothing: antialiased; min-height: 100vh;
             transition: background-color 0.5s ease, color 0.5s ease;
+            /* 背景图属性初始化 */
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            background-repeat: no-repeat;
         }
 
-        body::before {
+        /* 极光背景动画 (如果有壁纸则隐藏) */
+        body:not(.has-wallpaper)::before {
             content: ''; position: fixed; top: -50%; left: -50%; width: 200%; height: 200%;
             background: radial-gradient(circle at 50% 50%, var(--aurora-1), transparent 60%),
                         radial-gradient(circle at 80% 20%, var(--aurora-2), transparent 50%);
@@ -51,19 +57,31 @@
 
         .container { max-width: 1100px; margin: 0 auto; padding: 60px 20px; text-align: center; }
 
-        .theme-toggle {
-            position: fixed; top: 20px; right: 20px; width: 44px; height: 44px; border-radius: 50%;
+        /* 通用按钮样式 */
+        .icon-btn {
+            position: fixed; top: 20px; width: 44px; height: 44px; border-radius: 50%;
             background: var(--btn-bg); border: var(--border); cursor: pointer; display: flex; align-items: center; justify-content: center;
             font-size: 20px; backdrop-filter: var(--blur); transition: all 0.3s ease; z-index: 100; box-shadow: var(--shadow);
         }
-        .theme-toggle:hover { transform: scale(1.1); }
+        .icon-btn:hover { transform: scale(1.1); }
+
+        /* 右上角：主题切换 */
+        .theme-toggle { right: 20px; }
         
+        /* 🔥 新增：左上角：壁纸切换 🔥 */
+        .wallpaper-toggle { left: 20px; }
+
         .header { margin-bottom: 40px; animation: fadeIn 0.8s ease-out; }
         .header h1 { 
             font-size: 56px; font-weight: 700; letter-spacing: -1.5px; margin-bottom: 15px; 
             background: linear-gradient(135deg, var(--text-main) 0%, var(--text-sub) 100%);
             -webkit-background-clip: text; -webkit-text-fill-color: transparent;
         }
+        /* 当有壁纸时，增强标题的可读性（可选） */
+        body.has-wallpaper .header h1 {
+            text-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
         .header p { font-size: 18px; color: var(--text-sub); font-weight: 400; letter-spacing: 1px; line-height: 1.6; max-width: 600px; margin: 0 auto; min-height: 30px; }
 
         .search-wrapper { max-width: 500px; margin: 40px auto 0; position: relative; }
@@ -103,7 +121,6 @@
         }
         .clock-widget .date { font-size: 13px; color: var(--text-sub); font-weight: 600; text-transform: uppercase; letter-spacing: 1px; }
 
-        /* 🔥 新增：天气传送门样式 🔥 */
         a.widget {
             text-decoration: none;
             color: var(--text-main);
@@ -146,7 +163,12 @@
 </head>
 <body>
 
-    <button class="theme-toggle" onclick="toggleTheme()" title="切换模式">
+    <button class="icon-btn wallpaper-toggle" onclick="triggerWallpaper()" title="更换本地壁纸">
+        <span>🖼️</span>
+    </button>
+    <input type="file" id="wallpaper-input" accept="image/*" style="display: none;" onchange="handleWallpaper(this)">
+
+    <button class="icon-btn theme-toggle" onclick="toggleTheme()" title="切换模式">
         <span id="theme-icon">🌙</span>
     </button>
 
@@ -227,7 +249,51 @@
     </div>
 
 <script>
-    // --- 1. 时钟逻辑 ---
+    // --- 1. 壁纸引擎逻辑 (新增) ---
+    function triggerWallpaper() {
+        document.getElementById('wallpaper-input').click();
+    }
+
+    function handleWallpaper(input) {
+        if (input.files && input.files[0]) {
+            var file = input.files[0];
+            var reader = new FileReader();
+            
+            reader.onload = function(e) {
+                var base64Image = e.target.result;
+                
+                // 尝试保存到本地
+                try {
+                    localStorage.setItem('customWallpaper', base64Image);
+                    applyWallpaper(base64Image);
+                } catch (err) {
+                    console.error("Storage failed: ", err);
+                    alert("⚠️ 图片太大了，浏览器存不下。\n\n这次我会临时显示它，但刷新后会消失。\n建议使用 4MB 以下的 JPG 图片！");
+                    // 即使存不下，当次也要让用户爽一下
+                    applyWallpaper(base64Image);
+                }
+            };
+            
+            reader.readAsDataURL(file);
+        }
+    }
+
+    function applyWallpaper(src) {
+        // 设置 Body 背景
+        document.body.style.backgroundImage = `url(${src})`;
+        // 标记 Body 有壁纸，用于 CSS 隐藏极光动画
+        document.body.classList.add('has-wallpaper');
+    }
+
+    // 初始化：检查是否有保存的壁纸
+    window.addEventListener('load', function() {
+        var saved = localStorage.getItem('customWallpaper');
+        if (saved) {
+            applyWallpaper(saved);
+        }
+    });
+
+    // --- 2. 时钟逻辑 ---
     function updateClock() {
         var now = new Date();
         var hours = String(now.getHours()).padStart(2, '0');
@@ -241,7 +307,7 @@
     setInterval(updateClock, 1000);
     updateClock();
 
-    // --- 2. 问候语逻辑 ---
+    // --- 3. 问候语逻辑 ---
     var hour = new Date().getHours();
     var greetingTitle = document.getElementById("greeting");
     if (hour >= 0 && hour < 5) { greetingTitle.innerText = "Good Night."; } 
@@ -249,7 +315,7 @@
     else if (hour >= 12 && hour < 18) { greetingTitle.innerText = "Good Afternoon."; } 
     else { greetingTitle.innerText = "Good Evening."; }
 
-    // --- 3. 随机名言 (保留你的名言库) ---
+    // --- 4. 随机名言 ---
     var quotes = [
         "路漫漫其修远兮，吾将上下而求索。—— 屈原",
         "学而时习之，不亦说乎。—— 孔子",
@@ -275,7 +341,7 @@
     var randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
     document.getElementById("quote").innerText = randomQuote;
 
-    // --- 4. 夜间模式 ---
+    // --- 5. 夜间模式 ---
     function toggleTheme() {
         var body = document.body;
         var icon = document.getElementById("theme-icon");
