@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>我的个人中心</title>
+    <style>
+        /* 🎨 苹果设计语言核心变量 */
+        :root {
+            --bg-color: #f5f5f7; /* 经典的苹果浅灰背景 */
+            --card-bg: rgba(255, 255, 255, 0.8); /* 半透明卡片 */
+            --text-main: #1d1d1f; /* 苹果黑 */
+            --text-sub: #86868b; /* 苹果灰 */
+            --accent: #0071e3; /* 苹果蓝 */
+            --shadow: 0 10px 30px rgba(0, 0, 0, 0.04); /* 超柔和阴影 */
+            --hover-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+            --blur: blur(20px); /* 毛玻璃模糊度 */
+        }
+
+        body {
+            margin: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", sans-serif; /* 优先使用苹果字体 */
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            -webkit-font-smoothing: antialiased; /* 让字体更清晰 */
+        }
+
+        /* 布局容器 */
+        .container {
+            max-width: 980px;
+            margin: 0 auto;
+            padding: 60px 20px;
+        }
+
+        /* 顶部区域：模仿 macOS 欢迎语 */
+        .header {
+            text-align: center;
+            margin-bottom: 50px;
+            animation: fadeIn 1s ease;
+        }
+
+        .header h1 {
+            font-size: 48px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 20px;
+            color: var(--text-sub);
+            font-weight: 400;
+        }
+
+        /* 🔍 Spotlight 搜索框风格 */
+        .search-wrapper {
+            max-width: 600px;
+            margin: 30px auto 0;
+            position: relative;
+        }
+        
+        .search-box {
+            width: 100%;
+            padding: 18px 24px;
+            padding-left: 50px; /* 留出图标位置 */
+            font-size: 18px;
+            border: none;
+            border-radius: 18px;
+            background: rgba(255, 255, 255, 0.9);
+            box-shadow: var(--shadow);
+            outline: none;
+            transition: all 0.3s ease;
+            backdrop-filter: var(--blur);
+            -webkit-backdrop-filter: var(--blur);
+            box-sizing: border-box; /* 修复输入框溢出 */
+        }
+
+        .search-box:focus {
+            transform: scale(1.02);
+            box-shadow: var(--hover-shadow);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-sub);
+            font-size: 20px;
+        }
+
+        /* 🍱 Bento Grid (便当盒布局) */
+        .grid-section {
+            margin-top: 60px;
+        }
+        
+        .section-title {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 24px;
+            margin-left: 5px;
+        }
+
+        .bento-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); /* 自动响应式 */
+            gap: 24px;
+        }
+
+        /* 卡片设计：核心在于大圆角和微动效 */
+        .card {
+            background: var(--card-bg);
+            border-radius: 28px; /* 苹果标志性的大圆角 */
+            padding: 30px;
+            text-decoration: none;
+            color: var(--text-main);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1); /* 顺滑的贝塞尔曲线 */
+            box-shadow: var(--shadow);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            backdrop-filter: var(--blur);
+            -webkit-backdrop-filter: var(--blur);
+        }
+
+        .card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: var(--hover-shadow);
+            background: rgba(255, 255, 255, 0.95);
+        }
+
+        .icon {
+            font-size: 42px;
+            margin-bottom: 16px;
+            filter: drop-shadow(0 4px 6px rgba(0,0,0,0.1));
+        }
+
+        .title {
+            font-size: 17px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .desc {
+            font-size: 13px;
+            color: var(--text-sub);
+        }
+
+        /* 📱 底部 Dock 栏风格 */
+        .footer {
+            margin-top: 80px;
+            text-align: center;
+            color: var(--text-sub);
+            font-size: 14px;
+            padding-bottom: 40px;
+        }
+
+        /* 简单的淡入动画 */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* 手机端适配 */
+        @media (max-width: 600px) {
+            .header h1 { font-size: 36px; }
+            .bento-grid { grid-template-columns: repeat(2, 1fr); gap: 16px; } /* 手机上显示两列 */
+            .card { padding: 20px; border-radius: 22px; }
+            .icon { font-size: 32px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        
+        <div class="header">
+            <h1>Good Morning.</h1>
+            <p>探索·发现·创造</p>
+            
+            <form class="search-wrapper" action="https://www.baidu.com/s" target="_blank">
+                <span class="search-icon">🔍</span>
+                <input type="text" class="search-box" name="wd" placeholder="Search...">
+            </form>
+        </div>
+
+        <div class="grid-section">
+            <div class="section-title">Productivity</div>
+            <div class="bento-grid">
+                <a href="https://chat.openai.com" target="_blank" class="card">
+                    <span class="icon">🤖</span>
+                    <span class="title">ChatGPT</span>
+                    <span class="desc">AI 助手</span>
+                </a>
+                <a href="https://github.com" target="_blank" class="card">
+                    <span class="icon">🐱</span>
+                    <span class="title">GitHub</span>
+                    <span class="desc">代码仓库</span>
+                </a>
+                <a href="https://www.notion.so" target="_blank" class="card">
+                    <span class="icon">📓</span>
+                    <span class="title">Notion</span>
+                    <span class="desc">第二大脑</span>
+                </a>
+                <a href="https://mail.google.com" target="_blank" class="card">
+                    <span class="icon">📧</span>
+                    <span class="title">Gmail</span>
+                    <span class="desc">工作邮件</span>
+                </a>
+            </div>
+        </div>
+
+        <div class="grid-section">
+            <div class="section-title">Life & Entertainment</div>
+            <div class="bento-grid">
+                <a href="https://www.bilibili.com" target="_blank" class="card">
+                    <span class="icon">📺</span>
+                    <span class="title">Bilibili</span>
+                    <span class="desc">干杯</span>
+                </a>
+                <a href="https://www.youtube.com" target="_blank" class="card">
+                    <span class="icon">▶️</span>
+                    <span class="title">YouTube</span>
+                    <span class="desc">探索世界</span>
+                </a>
+                <a href="https://music.apple.com" target="_blank" class="card">
+                    <span class="icon">🎵</span>
+                    <span class="title">Music</span>
+                    <span class="desc">听见好歌</span>
+                </a>
+                <a href="https://www.zhihu.com" target="_blank" class="card">
+                    <span class="icon">💡</span>
+                    <span class="title">知乎</span>
+                    <span class="desc">分享知识</span>
+                </a>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>Designed by You · 2026</p>
+        </div>
+
+    </div>
+
+</body>
+</html>
