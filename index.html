@@ -5,54 +5,196 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>我的日常</title>
     <style>
-        /* --- 核心样式 (保持苹果风) --- */
+        /* --- 核心变量：定义高级感的灵魂 --- */
         :root {
             --bg-color: #f5f5f7;
-            --card-bg: rgba(255, 255, 255, 0.85);
+            --card-bg: rgba(255, 255, 255, 0.65); /* 更通透的玻璃 */
             --text-main: #1d1d1f;
             --text-sub: #86868b;
-            --hover-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
-            --blur: blur(20px);
-            --accent-blue: #0071e3;
-            --accent-purple: #5e5ce6;
-            --accent-orange: #ff9500;
+            --shadow-sm: 0 4px 6px rgba(0, 0, 0, 0.02);
+            --shadow-md: 0 10px 30px rgba(0, 0, 0, 0.04);
+            --shadow-hover: 0 20px 40px rgba(0, 0, 0, 0.08);
+            --blur: blur(24px); /* 更深邃的模糊 */
+            --border: 1px solid rgba(255, 255, 255, 0.6);
         }
 
-        body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", sans-serif; background-color: var(--bg-color); color: var(--text-main); -webkit-font-smoothing: antialiased; }
-        .container { max-width: 1200px; margin: 0 auto; padding: 60px 20px; }
-        
-        /* 头部 */
-        .header { text-align: center; margin-bottom: 50px; }
-        .header h1 { font-size: 42px; font-weight: 700; margin-bottom: 10px; color: #000; }
-        .header p { font-size: 18px; color: var(--text-sub); }
+        body { 
+            margin: 0; 
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", sans-serif; 
+            background-color: var(--bg-color); 
+            color: var(--text-main); 
+            -webkit-font-smoothing: antialiased; 
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
 
-        /* 搜索框 */
-        .search-wrapper { max-width: 500px; margin: 30px auto 0; position: relative; }
-        .search-box { width: 100%; padding: 16px 20px 16px 50px; font-size: 16px; border: none; border-radius: 16px; background: rgba(255,255,255,0.9); box-shadow: 0 4px 20px rgba(0,0,0,0.05); outline: none; transition: all 0.3s; box-sizing: border-box; }
-        .search-box:focus { box-shadow: 0 8px 30px rgba(0,0,0,0.1); transform: scale(1.01); }
-        .search-icon { position: absolute; left: 18px; top: 50%; transform: translateY(-50%); opacity: 0.5; }
+        /* --- 极光背景特效 (Aurora) --- */
+        body::before {
+            content: '';
+            position: fixed;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at 50% 50%, rgba(0, 113, 227, 0.03), transparent 60%),
+                        radial-gradient(circle at 80% 20%, rgba(94, 92, 230, 0.03), transparent 50%);
+            z-index: -1;
+            animation: aurora 20s infinite linear;
+        }
+        @keyframes aurora {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
 
-        /* 分区标题 */
-        .section-header { display: flex; align-items: center; margin: 60px 0 25px 5px; border-bottom: 1px solid rgba(0,0,0,0.05); padding-bottom: 10px; }
-        .section-title { font-size: 24px; font-weight: 600; margin-right: 15px; }
-        .badge { font-size: 12px; color: white; padding: 4px 10px; border-radius: 20px; font-weight: 500; }
+        .container { max-width: 1000px; margin: 0 auto; padding: 80px 20px; }
         
-        /* 颜色标签 */
-        .bg-blue { background: var(--accent-blue); }
-        .bg-purple { background: var(--accent-purple); }
-        .bg-orange { background: var(--accent-orange); }
+        /* 头部设计 */
+        .header { text-align: center; margin-bottom: 70px; animation: fadeIn 0.8s ease-out; }
+        .header h1 { 
+            font-size: 56px; 
+            font-weight: 700; 
+            letter-spacing: -1.5px; 
+            margin-bottom: 12px; 
+            background: linear-gradient(135deg, #1d1d1f 0%, #434344 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .header p { font-size: 20px; color: var(--text-sub); font-weight: 400; letter-spacing: 0.5px; }
+
+        /* Spotlight 搜索框 */
+        .search-wrapper { 
+            max-width: 580px; 
+            margin: 40px auto 0; 
+            position: relative; 
+            transition: all 0.3s ease;
+        }
+        .search-box { 
+            width: 100%; 
+            padding: 20px 24px 20px 54px; 
+            font-size: 17px; 
+            border: var(--border); 
+            border-radius: 24px; 
+            background: rgba(255,255,255,0.7); 
+            box-shadow: var(--shadow-md); 
+            outline: none; 
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); 
+            box-sizing: border-box; 
+            backdrop-filter: var(--blur);
+            -webkit-backdrop-filter: var(--blur);
+            color: var(--text-main);
+        }
+        .search-box:focus { 
+            transform: scale(1.02); 
+            box-shadow: var(--shadow-hover); 
+            background: rgba(255,255,255,0.95);
+        }
+        .search-icon { 
+            position: absolute; 
+            left: 22px; 
+            top: 50%; 
+            transform: translateY(-50%); 
+            color: var(--text-sub); 
+            font-size: 18px; 
+        }
+
+        /* 分区标题 & 胶囊标签 */
+        .section-header { 
+            display: flex; 
+            align-items: center; 
+            margin: 60px 0 24px 8px; 
+        }
+        .section-title { 
+            font-size: 22px; 
+            font-weight: 600; 
+            letter-spacing: -0.5px;
+            margin-right: 12px; 
+        }
+        /* 高级胶囊样式 */
+        .badge { 
+            font-size: 11px; 
+            padding: 4px 10px; 
+            border-radius: 20px; 
+            font-weight: 600; 
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .bg-blue { background: rgba(0, 113, 227, 0.1); color: #0071e3; }
+        .bg-purple { background: rgba(94, 92, 230, 0.1); color: #5e5ce6; }
+        .bg-orange { background: rgba(255, 149, 0, 0.1); color: #ff9500; }
 
         /* 网格布局 */
-        .bento-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px; }
+        .bento-grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); 
+            gap: 24px; 
+            margin-bottom: 40px; /* 修复页脚拥挤 */
+        }
 
-        /* 卡片样式 */
-        .card { background: var(--card-bg); border-radius: 22px; padding: 25px; text-decoration: none; color: inherit; display: flex; flex-direction: column; align-items: center; text-align: center; transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); border: 1px solid rgba(255,255,255,0.6); backdrop-filter: var(--blur); height: 100%; box-sizing: border-box; }
-        .card:hover { transform: translateY(-6px); box-shadow: var(--hover-shadow); background: #fff; }
-        .emoji-icon { font-size: 42px; margin-bottom: 15px; }
-        .title { font-size: 17px; font-weight: 600; margin-bottom: 5px; width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .desc { font-size: 13px; color: var(--text-sub); width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        /* 卡片样式：极光玻璃 */
+        .card { 
+            background: var(--card-bg); 
+            border-radius: 24px; /* iOS G2 圆角 */
+            padding: 32px 24px; 
+            text-decoration: none; 
+            color: inherit; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            text-align: center; 
+            transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1); 
+            border: var(--border); 
+            backdrop-filter: var(--blur); 
+            -webkit-backdrop-filter: var(--blur);
+            position: relative;
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+        }
+        
+        /* 鼠标悬停的高级光感 */
+        .card:hover { 
+            transform: translateY(-8px); 
+            box-shadow: var(--shadow-hover); 
+            background: rgba(255, 255, 255, 0.9);
+            border-color: rgba(255, 255, 255, 0.9);
+        }
+        
+        .emoji-icon { 
+            font-size: 44px; 
+            margin-bottom: 16px; 
+            filter: drop-shadow(0 4px 12px rgba(0,0,0,0.1)); /* 图标立体感 */
+        }
+        .title { 
+            font-size: 17px; 
+            font-weight: 600; 
+            margin-bottom: 6px; 
+            color: var(--text-main);
+        }
+        .desc { 
+            font-size: 13px; 
+            color: var(--text-sub); 
+            font-weight: 400;
+        }
 
-        @media (max-width: 600px) { .bento-grid { grid-template-columns: repeat(2, 1fr); gap: 15px; } .header h1 { font-size: 32px; } }
+        /* 页脚 */
+        .footer {
+            margin-top: 80px;
+            text-align: center;
+            border-top: 1px solid rgba(0,0,0,0.05);
+            padding-top: 40px;
+        }
+        .footer p {
+            font-size: 13px;
+            color: var(--text-sub);
+            opacity: 0.6;
+        }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        @media (max-width: 600px) { 
+            .header h1 { font-size: 36px; } 
+            .bento-grid { grid-template-columns: repeat(2, 1fr); gap: 16px; }
+            .card { padding: 24px 16px; border-radius: 20px; }
+        }
     </style>
 </head>
 <body>
@@ -61,9 +203,9 @@
         <div class="header">
             <h1 id="greeting">Welcome.</h1>
             <p>因上努力 · 果上随缘</p>
-            <form class="search-wrapper" action="https://www.bing.com/" target="_blank">
+            <form class="search-wrapper" action="https://www.bing.com/search" target="_blank">
                 <span class="search-icon">🔍</span>
-                <input type="text" class="search-box" name="wd" placeholder="搜索一下...">
+                <input type="text" class="search-box" name="q" placeholder="Search...">
             </form>
         </div>
 
@@ -77,7 +219,7 @@
                 <div class="title">Gemini</div>
                 <div class="desc">Google AI</div>
             </a>
-        </div>
+            </div>
 
         <div class="section-header">
             <span class="section-title">💼 创作平台</span>
@@ -85,8 +227,8 @@
         </div>
         <div class="bento-grid">
             <a href="https://creator.xiaohongshu.com/creator/home?source=official" target="_blank" class="card">
-                <div class="emoji-icon">🏛️</div>
-                <div class="title">小红书创作服务平台</div>
+                <div class="emoji-icon">📕</div>
+                <div class="title">小红书创作</div>
                 <div class="desc">发现生活的美好</div>
             </a>
         </div>
@@ -97,45 +239,46 @@
         </div>
         <div class="bento-grid">
             <a href="https://www.douyin.com/" target="_blank" class="card">
-                <div class="emoji-icon">📖</div>
+                <div class="emoji-icon">🎵</div>
                 <div class="title">抖音</div>
                 <div class="desc">记录美好生活</div>
             </a>
             <a href="https://www.bilibili.com/" target="_blank" class="card">
                 <div class="emoji-icon">🐱</div>
-                <div class="title">B 站</div>
-                <div class="desc">( ゜- ゜)つロ 乾杯~</div>
+                <div class="title">Bilibili</div>
+                <div class="desc">干杯 ( ゜- ゜)つロ</div>
             </a>
             <a href="https://music.163.com/#/discover" target="_blank" class="card">
                 <div class="emoji-icon">🎧</div>
                 <div class="title">网易云音乐</div>
                 <div class="desc">音乐的力量</div>
             </a>
+        </div>
 
         <div class="footer">
             <p>Designed by Chenyunlong · 2026</p>
-
         </div>
 
     </div>
+
 <script>
-    // 获取当前北京时间（基于你电脑的系统时间）
+    // 时间感知脚本
     var hour = new Date().getHours();
     var title = document.getElementById("greeting");
     
-    // 0点-5点: 深夜 (Good Night)
+    // 0点-5点: 深夜
     if (hour >= 0 && hour < 5) {
         title.innerText = "Good Night.";
     } 
-    // 5点-12点: 上午 (Good Morning)
+    // 5点-12点: 上午
     else if (hour >= 5 && hour < 12) {
         title.innerText = "Good Morning.";
     } 
-    // 12点-18点: 下午+中午 (Good Afternoon)
+    // 12点-18点: 下午
     else if (hour >= 12 && hour < 18) {
         title.innerText = "Good Afternoon.";
     } 
-    // 18点-24点: 晚上 (Good Evening)
+    // 18点-24点: 晚上
     else {
         title.innerText = "Good Evening.";
     }
