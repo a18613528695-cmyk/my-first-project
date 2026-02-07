@@ -59,7 +59,7 @@
 
     <div class="container">
         <div class="header">
-            <h1>Workspace</h1>
+            <h1 id="greeting">Welcome.</h1>
             <p>因上努力 · 果上随缘</p>
             <form class="search-wrapper" action="https://www.baidu.com/s" target="_blank">
                 <span class="search-icon">🔍</span>
@@ -148,5 +148,27 @@
         </div>
 
     </div>
+<script>
+    // 获取当前北京时间（基于你电脑的系统时间）
+    var hour = new Date().getHours();
+    var title = document.getElementById("greeting");
+    
+    // 0点-5点: 深夜 (Good Night)
+    if (hour >= 0 && hour < 5) {
+        title.innerText = "Good Night.";
+    } 
+    // 5点-12点: 上午 (Good Morning)
+    else if (hour >= 5 && hour < 12) {
+        title.innerText = "Good Morning.";
+    } 
+    // 12点-18点: 下午+中午 (Good Afternoon)
+    else if (hour >= 12 && hour < 18) {
+        title.innerText = "Good Afternoon.";
+    } 
+    // 18点-24点: 晚上 (Good Evening)
+    else {
+        title.innerText = "Good Evening.";
+    }
+</script>
 </body>
 </html>
