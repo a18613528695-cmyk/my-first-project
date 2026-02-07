@@ -3,19 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>我的日常</title>
+    <title>我的数字空间</title>
     <style>
-        /* --- 核心变量：定义高级感的灵魂 --- */
+        /* --- 核心变量：定义昼夜两套皮肤 --- */
         :root {
+            /* 日间模式 (Day) */
             --bg-color: #f5f5f7;
-            --card-bg: rgba(255, 255, 255, 0.65); /* 更通透的玻璃 */
+            --card-bg: rgba(255, 255, 255, 0.65);
             --text-main: #1d1d1f;
             --text-sub: #86868b;
-            --shadow-sm: 0 4px 6px rgba(0, 0, 0, 0.02);
-            --shadow-md: 0 10px 30px rgba(0, 0, 0, 0.04);
-            --shadow-hover: 0 20px 40px rgba(0, 0, 0, 0.08);
-            --blur: blur(24px); /* 更深邃的模糊 */
             --border: 1px solid rgba(255, 255, 255, 0.6);
+            --shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
+            --shadow-hover: 0 20px 40px rgba(0, 0, 0, 0.08);
+            --blur: blur(24px);
+            --aurora-1: rgba(0, 113, 227, 0.05); /* 浅蓝 */
+            --aurora-2: rgba(94, 92, 230, 0.05); /* 浅紫 */
+            --btn-bg: rgba(255, 255, 255, 0.8);
+        }
+
+        /* 夜间模式 (Night) - 苹果级深色调教 */
+        [data-theme="dark"] {
+            --bg-color: #000000; /* 纯黑背景 */
+            --card-bg: rgba(28, 28, 30, 0.65); /* 深灰玻璃 */
+            --text-main: #f5f5f7; /* 亮白文字 */
+            --text-sub: #a1a1a6; /* 浅灰文字 */
+            --border: 1px solid rgba(255, 255, 255, 0.1);
+            --shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            --shadow-hover: 0 20px 40px rgba(0, 0, 0, 0.4);
+            --aurora-1: rgba(10, 132, 255, 0.15); /* 深夜蓝光 */
+            --aurora-2: rgba(191, 90, 242, 0.15); /* 深夜紫光 */
+            --btn-bg: rgba(44, 44, 46, 0.8);
         }
 
         body { 
@@ -25,184 +42,124 @@
             color: var(--text-main); 
             -webkit-font-smoothing: antialiased; 
             min-height: 100vh;
-            position: relative;
+            transition: background-color 0.5s ease, color 0.5s ease; /* 丝滑切换动画 */
             overflow-x: hidden;
         }
 
-        /* --- 极光背景特效 (Aurora) --- */
+        /* 极光背景动画 */
         body::before {
-            content: '';
-            position: fixed;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle at 50% 50%, rgba(0, 113, 227, 0.03), transparent 60%),
-                        radial-gradient(circle at 80% 20%, rgba(94, 92, 230, 0.03), transparent 50%);
-            z-index: -1;
-            animation: aurora 20s infinite linear;
+            content: ''; position: fixed; top: -50%; left: -50%; width: 200%; height: 200%;
+            background: radial-gradient(circle at 50% 50%, var(--aurora-1), transparent 60%),
+                        radial-gradient(circle at 80% 20%, var(--aurora-2), transparent 50%);
+            z-index: -1; animation: aurora 20s infinite linear;
+            transition: background 0.5s ease;
         }
-        @keyframes aurora {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
+        @keyframes aurora { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
-        .container { max-width: 1000px; margin: 0 auto; padding: 80px 20px; }
-        
-        /* 头部设计 */
-        .header { text-align: center; margin-bottom: 70px; animation: fadeIn 0.8s ease-out; }
-        .header h1 { 
-            font-size: 56px; 
-            font-weight: 700; 
-            letter-spacing: -1.5px; 
-            margin-bottom: 12px; 
-            background: linear-gradient(135deg, #1d1d1f 0%, #434344 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-        .header p { font-size: 20px; color: var(--text-sub); font-weight: 400; letter-spacing: 0.5px; }
+        .container { max-width: 1100px; margin: 0 auto; padding: 80px 20px; text-align: center; }
 
-        /* Spotlight 搜索框 */
-        .search-wrapper { 
-            max-width: 580px; 
-            margin: 40px auto 0; 
-            position: relative; 
-            transition: all 0.3s ease;
-        }
-        .search-box { 
-            width: 100%; 
-            padding: 20px 24px 20px 54px; 
-            font-size: 17px; 
-            border: var(--border); 
-            border-radius: 24px; 
-            background: rgba(255,255,255,0.7); 
-            box-shadow: var(--shadow-md); 
-            outline: none; 
-            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); 
-            box-sizing: border-box; 
+        /* 切换按钮 */
+        .theme-toggle {
+            position: fixed; top: 20px; right: 20px;
+            width: 44px; height: 44px; border-radius: 50%;
+            background: var(--btn-bg);
+            border: var(--border);
+            cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 20px;
             backdrop-filter: var(--blur);
-            -webkit-backdrop-filter: var(--blur);
-            color: var(--text-main);
+            transition: all 0.3s ease;
+            z-index: 100;
+            box-shadow: var(--shadow);
         }
-        .search-box:focus { 
-            transform: scale(1.02); 
-            box-shadow: var(--shadow-hover); 
-            background: rgba(255,255,255,0.95);
+        .theme-toggle:hover { transform: scale(1.1); }
+        
+        /* 头部 */
+        .header { margin-bottom: 70px; animation: fadeIn 0.8s ease-out; }
+        .header h1 { 
+            font-size: 56px; font-weight: 700; letter-spacing: -1.5px; margin-bottom: 15px; 
+            background: linear-gradient(135deg, var(--text-main) 0%, var(--text-sub) 100%);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
         }
-        .search-icon { 
-            position: absolute; 
-            left: 22px; 
-            top: 50%; 
-            transform: translateY(-50%); 
-            color: var(--text-sub); 
-            font-size: 18px; 
+        /* 名言样式 */
+        .header p { 
+            font-size: 18px; color: var(--text-sub); font-weight: 400; letter-spacing: 1px; line-height: 1.6;
+            max-width: 600px; margin: 0 auto; min-height: 30px; /* 防止抖动 */
         }
 
-        /* 分区标题 & 胶囊标签 */
+        /* 居中的搜索框 */
+        .search-wrapper { max-width: 500px; margin: 40px auto 0; position: relative; }
+        .search-box { 
+            width: 100%; padding: 18px 24px 18px 54px; font-size: 17px; 
+            border: var(--border); border-radius: 24px; 
+            background: var(--card-bg); color: var(--text-main);
+            box-shadow: var(--shadow); outline: none; 
+            transition: all 0.3s; box-sizing: border-box; 
+            backdrop-filter: var(--blur);
+        }
+        .search-box:focus { transform: scale(1.02); box-shadow: var(--shadow-hover); }
+        .search-icon { position: absolute; left: 22px; top: 50%; transform: translateY(-50%); color: var(--text-sub); }
+
+        /* 分区标题 - 强制居中 */
         .section-header { 
-            display: flex; 
-            align-items: center; 
-            margin: 60px 0 24px 8px; 
+            display: flex; align-items: center; justify-content: center; /* 关键：居中对齐 */
+            margin: 70px 0 30px 0; 
         }
-        .section-title { 
-            font-size: 22px; 
-            font-weight: 600; 
-            letter-spacing: -0.5px;
-            margin-right: 12px; 
-        }
-        /* 高级胶囊样式 */
-        .badge { 
-            font-size: 11px; 
-            padding: 4px 10px; 
-            border-radius: 20px; 
-            font-weight: 600; 
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-        .bg-blue { background: rgba(0, 113, 227, 0.1); color: #0071e3; }
-        .bg-purple { background: rgba(94, 92, 230, 0.1); color: #5e5ce6; }
-        .bg-orange { background: rgba(255, 149, 0, 0.1); color: #ff9500; }
+        .section-title { font-size: 20px; font-weight: 600; margin-right: 10px; color: var(--text-main); }
+        .badge { font-size: 11px; padding: 4px 10px; border-radius: 20px; font-weight: 600; text-transform: uppercase; }
+        
+        .bg-blue { background: rgba(0, 113, 227, 0.15); color: #0071e3; }
+        .bg-purple { background: rgba(94, 92, 230, 0.15); color: #5e5ce6; }
+        .bg-orange { background: rgba(255, 149, 0, 0.15); color: #ff9500; }
+        /* 夜间模式下标签颜色微调 */
+        [data-theme="dark"] .bg-blue { background: rgba(10, 132, 255, 0.2); color: #64d2ff; }
+        [data-theme="dark"] .bg-purple { background: rgba(191, 90, 242, 0.2); color: #bf5af2; }
+        [data-theme="dark"] .bg-orange { background: rgba(255, 159, 10, 0.2); color: #ff9f0a; }
 
-        /* 网格布局 */
+        /* 网格布局 - 强制居中 */
         .bento-grid { 
             display: grid; 
-            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); 
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); 
             gap: 24px; 
-            margin-bottom: 40px; /* 修复页脚拥挤 */
+            justify-content: center; /* 关键：网格整体居中 */
+            max-width: 900px; /* 限制宽度，防止太散 */
+            margin: 0 auto; 
         }
 
-        /* 卡片样式：极光玻璃 */
+        /* 卡片 */
         .card { 
-            background: var(--card-bg); 
-            border-radius: 24px; /* iOS G2 圆角 */
-            padding: 32px 24px; 
-            text-decoration: none; 
-            color: inherit; 
-            display: flex; 
-            flex-direction: column; 
-            align-items: center; 
-            text-align: center; 
+            background: var(--card-bg); border-radius: 24px; padding: 32px 20px; 
+            text-decoration: none; color: inherit; 
+            display: flex; flex-direction: column; align-items: center; text-align: center; 
             transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1); 
-            border: var(--border); 
-            backdrop-filter: var(--blur); 
-            -webkit-backdrop-filter: var(--blur);
-            position: relative;
-            overflow: hidden;
-            box-shadow: var(--shadow-sm);
+            border: var(--border); backdrop-filter: var(--blur); 
+            box-shadow: var(--shadow);
         }
+        .card:hover { transform: translateY(-8px); box-shadow: var(--shadow-hover); background: var(--bg-color); }
         
-        /* 鼠标悬停的高级光感 */
-        .card:hover { 
-            transform: translateY(-8px); 
-            box-shadow: var(--shadow-hover); 
-            background: rgba(255, 255, 255, 0.9);
-            border-color: rgba(255, 255, 255, 0.9);
-        }
-        
-        .emoji-icon { 
-            font-size: 44px; 
-            margin-bottom: 16px; 
-            filter: drop-shadow(0 4px 12px rgba(0,0,0,0.1)); /* 图标立体感 */
-        }
-        .title { 
-            font-size: 17px; 
-            font-weight: 600; 
-            margin-bottom: 6px; 
-            color: var(--text-main);
-        }
-        .desc { 
-            font-size: 13px; 
-            color: var(--text-sub); 
-            font-weight: 400;
-        }
+        .emoji-icon { font-size: 40px; margin-bottom: 16px; filter: drop-shadow(0 4px 8px rgba(0,0,0,0.1)); }
+        .title { font-size: 16px; font-weight: 600; margin-bottom: 6px; }
+        .desc { font-size: 12px; color: var(--text-sub); }
 
-        /* 页脚 */
-        .footer {
-            margin-top: 80px;
-            text-align: center;
-            border-top: 1px solid rgba(0,0,0,0.05);
-            padding-top: 40px;
-        }
-        .footer p {
-            font-size: 13px;
-            color: var(--text-sub);
-            opacity: 0.6;
-        }
+        .footer { margin-top: 80px; padding-top: 40px; border-top: 1px solid rgba(0,0,0,0.05); color: var(--text-sub); font-size: 13px; }
+        [data-theme="dark"] .footer { border-top: 1px solid rgba(255,255,255,0.05); }
 
         @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-        @media (max-width: 600px) { 
-            .header h1 { font-size: 36px; } 
-            .bento-grid { grid-template-columns: repeat(2, 1fr); gap: 16px; }
-            .card { padding: 24px 16px; border-radius: 20px; }
-        }
+        @media (max-width: 600px) { .header h1 { font-size: 36px; } .bento-grid { grid-template-columns: repeat(2, 1fr); gap: 15px; } }
     </style>
 </head>
 <body>
 
+    <button class="theme-toggle" onclick="toggleTheme()" title="切换模式">
+        <span id="theme-icon">🌙</span>
+    </button>
+
     <div class="container">
+        
         <div class="header">
             <h1 id="greeting">Welcome.</h1>
-            <p>因上努力 · 果上随缘</p>
+            <p id="quote">正在加载灵感...</p>
+            
             <form class="search-wrapper" action="https://www.bing.com/search" target="_blank">
                 <span class="search-icon">🔍</span>
                 <input type="text" class="search-box" name="q" placeholder="Search...">
@@ -211,7 +168,7 @@
 
         <div class="section-header">
             <span class="section-title">🧠 AI 智能</span>
-            <span class="badge bg-blue">效率引擎</span>
+            <span class="badge bg-blue">Efficiency</span>
         </div>
         <div class="bento-grid">
             <a href="https://gemini.google.com/app" target="_blank" class="card">
@@ -219,17 +176,32 @@
                 <div class="title">Gemini</div>
                 <div class="desc">Google AI</div>
             </a>
-            </div>
+            <a href="https://chatgpt.com/" target="_blank" class="card">
+                <div class="emoji-icon">🤖</div>
+                <div class="title">ChatGPT</div>
+                <div class="desc">OpenAI</div>
+            </a>
+             <a href="#" target="_blank" class="card" style="opacity: 0.5; border-style: dashed;">
+                <div class="emoji-icon">➕</div>
+                <div class="title">待添加</div>
+                <div class="desc">AI Tools</div>
+            </a>
+        </div>
 
         <div class="section-header">
             <span class="section-title">💼 创作平台</span>
-            <span class="badge bg-purple">Daily Work</span>
+            <span class="badge bg-purple">Creation</span>
         </div>
         <div class="bento-grid">
-            <a href="https://creator.xiaohongshu.com/creator/home?source=official" target="_blank" class="card">
+            <a href="https://creator.xiaohongshu.com/creator/home" target="_blank" class="card">
                 <div class="emoji-icon">📕</div>
                 <div class="title">小红书创作</div>
-                <div class="desc">发现生活的美好</div>
+                <div class="desc">发现美好</div>
+            </a>
+            <a href="#" target="_blank" class="card" style="opacity: 0.5; border-style: dashed;">
+                <div class="emoji-icon">➕</div>
+                <div class="title">待添加</div>
+                <div class="desc">Creation</div>
             </a>
         </div>
 
@@ -241,16 +213,16 @@
             <a href="https://www.douyin.com/" target="_blank" class="card">
                 <div class="emoji-icon">🎵</div>
                 <div class="title">抖音</div>
-                <div class="desc">记录美好生活</div>
+                <div class="desc">美好生活</div>
             </a>
             <a href="https://www.bilibili.com/" target="_blank" class="card">
                 <div class="emoji-icon">🐱</div>
                 <div class="title">Bilibili</div>
-                <div class="desc">干杯 ( ゜- ゜)つロ</div>
+                <div class="desc">干杯</div>
             </a>
-            <a href="https://music.163.com/#/discover" target="_blank" class="card">
+            <a href="https://music.163.com/" target="_blank" class="card">
                 <div class="emoji-icon">🎧</div>
-                <div class="title">网易云音乐</div>
+                <div class="title">网易云</div>
                 <div class="desc">音乐的力量</div>
             </a>
         </div>
@@ -262,25 +234,58 @@
     </div>
 
 <script>
-    // 时间感知脚本
+    // --- 1. 时间问候语逻辑 ---
     var hour = new Date().getHours();
-    var title = document.getElementById("greeting");
-    
-    // 0点-5点: 深夜
-    if (hour >= 0 && hour < 5) {
-        title.innerText = "Good Night.";
-    } 
-    // 5点-12点: 上午
-    else if (hour >= 5 && hour < 12) {
-        title.innerText = "Good Morning.";
-    } 
-    // 12点-18点: 下午
-    else if (hour >= 12 && hour < 18) {
-        title.innerText = "Good Afternoon.";
-    } 
-    // 18点-24点: 晚上
-    else {
-        title.innerText = "Good Evening.";
+    var greetingTitle = document.getElementById("greeting");
+    if (hour >= 0 && hour < 5) { greetingTitle.innerText = "Good Night."; } 
+    else if (hour >= 5 && hour < 12) { greetingTitle.innerText = "Good Morning."; } 
+    else if (hour >= 12 && hour < 18) { greetingTitle.innerText = "Good Afternoon."; } 
+    else { greetingTitle.innerText = "Good Evening."; }
+
+    // --- 2. 随机名言逻辑 (精选中国古今名句) ---
+    var quotes = [
+        "路漫漫其修远兮，吾将上下而求索。—— 屈原",
+        "学而时习之，不亦说乎。—— 孔子",
+        "知行合一，止于至善。—— 王阳明",
+        "海纳百川，有容乃大；壁立千仞，无欲则刚。—— 林则徐",
+        "人生天地间，忽如远行客。—— 《古诗十九首》",
+        "博学之，审问之，慎思之，明辨之，笃行之。—— 《中庸》",
+        "因上努力，果上随缘。—— 弘一法师",
+        "往者不可谏，来者犹可追。—— 《论语》",
+        "天行健，君子以自强不息。—— 《周易》",
+        "既然选择了远方，便只顾风雨兼程。—— 汪国真",
+        "生活不只是眼前的苟且，还有诗和远方。—— 高晓松",
+        "黄金时代，不在我们背后，乃在我们面前。—— 李大钊",
+        "愿你出走半生，归来仍是少年。—— 现代寄语",
+        "我见青山多妩媚，料青山见我应如是。—— 辛弃疾",
+        "粗缯大布裹生涯，腹有诗书气自华。—— 苏轼",
+        "大鹏一日同风起，扶摇直上九万里。—— 李白"
+    ];
+    // 随机选取一句
+    var randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
+    document.getElementById("quote").innerText = randomQuote;
+
+    // --- 3. 夜间模式切换逻辑 (带记忆功能) ---
+    function toggleTheme() {
+        var body = document.body;
+        var icon = document.getElementById("theme-icon");
+        
+        // 切换属性
+        if (body.getAttribute("data-theme") === "dark") {
+            body.removeAttribute("data-theme"); // 变回白天
+            icon.innerText = "🌙";
+            localStorage.setItem("theme", "light"); // 记住选择
+        } else {
+            body.setAttribute("data-theme", "dark"); // 变成黑夜
+            icon.innerText = "☀️";
+            localStorage.setItem("theme", "dark"); // 记住选择
+        }
+    }
+
+    // 网页加载时，检查用户之前有没有选过夜间模式
+    if (localStorage.getItem("theme") === "dark") {
+        document.body.setAttribute("data-theme", "dark");
+        document.getElementById("theme-icon").innerText = "☀️";
     }
 </script>
 </body>
