@@ -116,25 +116,35 @@
         [data-theme="dark"] .bg-purple { background: rgba(191, 90, 242, 0.2); color: #bf5af2; }
         [data-theme="dark"] .bg-orange { background: rgba(255, 159, 10, 0.2); color: #ff9f0a; }
 
-        /* 网格布局 - 强制居中 */
+        /* 弹性布局 - 强制居中 */
         .bento-grid { 
-            display: grid; 
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); 
+            display: flex;           /* 变成弹性盒子 */
+            flex-wrap: wrap;         /* 允许换行 */
+            justify-content: center; /* 【关键】让所有卡片在中间挤在一起 */
             gap: 24px; 
-            justify-content: center; /* 关键：网格整体居中 */
-            max-width: 900px; /* 限制宽度，防止太散 */
+            max-width: 1000px; 
             margin: 0 auto; 
         }
 
         /* 卡片 */
         .card { 
-            background: var(--card-bg); border-radius: 24px; padding: 32px 20px; 
-            text-decoration: none; color: inherit; 
-            display: flex; flex-direction: column; align-items: center; text-align: center; 
+            width: 220px;            /* 【关键】给卡片定个宽，防止它忽大忽小 */
+            background: var(--card-bg); 
+            border-radius: 24px; 
+            padding: 32px 20px; 
+            text-decoration: none; 
+            color: inherit; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            text-align: center; 
             transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1); 
-            border: var(--border); backdrop-filter: var(--blur); 
+            border: var(--border); 
+            backdrop-filter: var(--blur); 
             box-shadow: var(--shadow);
+            flex-shrink: 0;          /* 防止被挤扁 */
         }
+        /* 保持 .card:hover 不变 */
         .card:hover { transform: translateY(-8px); box-shadow: var(--shadow-hover); background: var(--bg-color); }
         
         .emoji-icon { font-size: 40px; margin-bottom: 16px; filter: drop-shadow(0 4px 8px rgba(0,0,0,0.1)); }
@@ -168,7 +178,7 @@
 
         <div class="section-header">
             <span class="section-title">🧠 AI 智能</span>
-            <span class="badge bg-blue">Efficiency</span>
+            <span class="badge bg-blue">Powered</span>
         </div>
         <div class="bento-grid">
             <a href="https://gemini.google.com/app" target="_blank" class="card">
@@ -180,30 +190,30 @@
 
         <div class="section-header">
             <span class="section-title">💼 创作平台</span>
-            <span class="badge bg-purple">Creation</span>
+            <span class="badge bg-purple">Creative</span>
         </div>
         <div class="bento-grid">
             <a href="https://creator.xiaohongshu.com/creator/home" target="_blank" class="card">
                 <div class="emoji-icon">📕</div>
                 <div class="title">小红书创作</div>
-                <div class="desc">发现美好</div>
+                <div class="desc">努力发现美好</div>
             </a>
         </div>
 
         <div class="section-header">
             <span class="section-title">📚 休闲娱乐</span>
-            <span class="badge bg-orange">Library</span>
+            <span class="badge bg-orange">Leisure</span>
         </div>
         <div class="bento-grid">
             <a href="https://www.douyin.com/" target="_blank" class="card">
                 <div class="emoji-icon">🎵</div>
                 <div class="title">抖音</div>
-                <div class="desc">美好生活</div>
+                <div class="desc">记录美好生活</div>
             </a>
             <a href="https://www.bilibili.com/" target="_blank" class="card">
                 <div class="emoji-icon">🐱</div>
                 <div class="title">Bilibili</div>
-                <div class="desc">干杯</div>
+                <div class="desc">共享热爱时刻</div>
             </a>
             <a href="https://music.163.com/" target="_blank" class="card">
                 <div class="emoji-icon">🎧</div>
@@ -233,15 +243,19 @@
         "学而时习之，不亦说乎。—— 孔子",
         "知行合一，止于至善。—— 王阳明",
         "海纳百川，有容乃大；壁立千仞，无欲则刚。—— 林则徐",
-        "人生天地间，忽如远行客。—— 《古诗十九首》",
+        "下定决心，不怕牺牲，排除万难，去争取胜利。—— 毛泽东",
         "博学之，审问之，慎思之，明辨之，笃行之。—— 《中庸》",
         "因上努力，果上随缘。—— 弘一法师",
         "往者不可谏，来者犹可追。—— 《论语》",
+        "打得赢就打，打不赢就走。—— 毛泽东",
         "天行健，君子以自强不息。—— 《周易》",
-        "既然选择了远方，便只顾风雨兼程。—— 汪国真",
+        "谁是我们的敌人？谁是我们的朋友？这个问题是革命的首要问题。—— 毛泽东",
         "生活不只是眼前的苟且，还有诗和远方。—— 高晓松",
+        "我这个人走得很慢，但是我从不后退。—— 亚伯拉罕 · 林肯",
+        "天生我材必有用，千金散尽还复来。——李白",
+        "失败也是我需要的，它和成功对我一样有价值。—— 爱迪生",
         "黄金时代，不在我们背后，乃在我们面前。—— 李大钊",
-        "愿你出走半生，归来仍是少年。—— 现代寄语",
+        "与天奋斗，其乐无穷；与地奋斗，其乐无穷；与人奋斗，其乐无穷。—— 毛泽东",
         "我见青山多妩媚，料青山见我应如是。—— 辛弃疾",
         "粗缯大布裹生涯，腹有诗书气自华。—— 苏轼",
         "大鹏一日同风起，扶摇直上九万里。—— 李白"
