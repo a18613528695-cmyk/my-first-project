@@ -1,34 +1,25 @@
-\# 🌟 也就是一级标题 (前面加一个#和空格)
+# 🚀 我的私人导航站
 
+这里是我精心挑选的常用书签，点击即可直达！
 
+---
 
-这里是正文。我在学习 GitHub，感觉\*\*非常有成就感\*\*！(两边加星号是变粗)
+## 💻 常用工具 (工作/效率)
+- [ChatGPT - AI助手](https://chat.openai.com)
+- [GitHub - 代码仓库](https://github.com)
+- [DeepL - 翻译神器](https://www.deepl.com)
+- [Notion - 笔记](https://www.notion.so)
 
+## 📺 摸鱼娱乐 (视频/社区)
+- [Bilibili](https://www.bilibili.com)
+- [YouTube](https://www.youtube.com)
+- [知乎](https://www.zhihu.com)
+- [豆瓣电影](https://movie.douban.com)
 
+## 📚 学习充电 (教程/文档)
+- [廖雪峰 Python 教程](https://www.liaoxuefeng.com)
+- [MDN Web 文档](https://developer.mozilla.org)
+- [GitHub 搜索技巧](https://github.com/search)
 
-\## 我的学习清单 (二级标题用两个#)
-
-
-
-\- \[x] 注册账号
-
-\- \[x] 创建仓库
-
-\- \[x] 学会 Fork
-
-\- \[x] 学会本地同步
-
-\- \[ ] 成为 GitHub 大师
-
-
-
-\### 🔗 推荐资源 (三级标题)
-
-
-
-这是我刚才发现的宝藏链接：\[点击这里访问 GitHub](https://github.com)
-
-
-
-> 📝 老师语录：Markdown 是程序员的必备技能，写文档全靠它！(前面加个大于号)
-
+---
+> 💡 最后更新时间：2026年2月7日
